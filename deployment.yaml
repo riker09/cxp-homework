@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: starship-registry
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: starship-registry
+  template:
+    metadata:
+      labels:
+        app: starship-registry
+    spec:
+      containers:
+      - name: starship-registry
+        image: hello-world
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        ports:
+        - containerPort: 8080

@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: starship-registry-ingress
+  labels:
+    name: starship-registry
+spec:
+  rules:
+  - http:
+      paths:
+      - pathType: Prefix
+        path: "/team-starfleet"
+        backend:
+          service:
+            name: starfleet-registry
+            port:
+              number: 80

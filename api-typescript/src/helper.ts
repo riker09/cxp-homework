@@ -37,5 +37,5 @@ export const generateSuffix = () => {
     x = r < p + (i * (1 - p)) / steps;
     i++;
   } while (!x);
-  return suffixes.substring(i, i + 1);
+  return `-${suffixes.substring(i, i + 1)}`;
 };

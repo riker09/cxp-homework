@@ -9,7 +9,7 @@ spec:
   - http:
       paths:
       - pathType: Prefix
-        path: "/team-starfleet"
+        path: "/starfleet"
         backend:
           service:
             name: starfleet-registry

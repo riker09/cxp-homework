@@ -14,7 +14,7 @@ WORKDIR /app
 
 ADD package*.json .
 
-RUN npm ci --no-audit --no-fund
+RUN npm ci --no-audit --no-fund --production
 
 COPY --from=build /app/dist /app
 

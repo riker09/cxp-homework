@@ -2,7 +2,7 @@ import express from "express";
 import { generateRandomRegistryNumber, generateSuffix } from "./helper";
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 8080;
 
 const PROBABILITY_TO_GENERATE_FIVE_NUMBERS = 0.2;
 const PROBABILITY_TO_GENERATE_LETTER_SUFFIX = 0.3;

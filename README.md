@@ -37,7 +37,7 @@ flowchart TB
         
         %% Ingress
         subgraph ingress[Ingress 'startship-registry-ingress']
-            ingresspath("/starfleet")
+            ingresspath("/startship-registry")
         end
         
         %% Service
@@ -49,13 +49,20 @@ flowchart TB
         
         %% Deployment
         subgraph deployment[Deployment 'startfleet-registry']
-            subgraph replicas['Replicas']
+            subgraph replicaset['ReplicaSet']
                 replica1[API 1]
                 replica2[API 2]
                 replica3[API 3]
             end
+        
         end
         
+        subgraph registry[Docker Image Registry]
+            Images
+        end
+        
+        deployment -->|pull| registry
+
         serviceapp -->|forward| deployment
     end
     

@@ -1,0 +1,15 @@
+openapi: "3.0.3"
+info:
+  title: "cxp_homework API"
+  description: "cxp_homework API"
+  version: "1.0.0"
+servers:
+  - url: "https://cxp.k8s.azure.msgoat.eu/cxp-team-starfleet/starship-registry"
+    description: "Generated server url"
+paths:
+  /:
+    get:
+      summary: "GET /"
+      responses:
+        "200":
+          description: "OK"

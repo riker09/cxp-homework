@@ -19,7 +19,7 @@ sequenceDiagram
 ### Kubernetes Cluster
 
 ```mermaid
-flowchart LR
+flowchart TB
     %% User
     user(User)
     

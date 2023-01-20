@@ -9,5 +9,4 @@ spec:
     app: starship-registry
   ports:
   - name: http
-    port: 80
-    targetPort: 8080
+    port: 8080

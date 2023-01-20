@@ -1,12 +1,10 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: cxp-team-starfleet-network-policy
+  name: allow-all-ingress
 spec:
   podSelector: {}
-  policyTypes:
-    - Ingress
   ingress:
-    - ports:
-        - protocol: TCP
-          port: 80
+  - {}
+  policyTypes:
+  - Ingress

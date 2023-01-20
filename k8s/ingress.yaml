@@ -11,7 +11,7 @@ spec:
     http:
       paths:
       - pathType: Prefix
-        path: "/cxp-team-starfleet/starship-registry"
+        path: "/cxp-team-starfleet/starship-registry(/|$)(.*)"
         backend:
           service:
             name: starship-registry-service

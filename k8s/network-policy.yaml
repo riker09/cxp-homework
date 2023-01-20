@@ -3,8 +3,10 @@ kind: NetworkPolicy
 metadata:
   name: allow-all-ingress
 spec:
-  podSelector: {}
-  ingress:
-  - {}
   policyTypes:
   - Ingress
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: starship-registry
+  ingress:
+  - {}

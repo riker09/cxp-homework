@@ -3,10 +3,12 @@ kind: Service
 metadata:
   name: starship-registry-service
   labels:
-    name: starship-registry
+    app.kubernetes.io/name: starship-registry
 spec:
   selector:
-    app: starship-registry
+    app.kubernetes.io/name: starship-registry
   ports:
   - name: http
-    port: 8080
+    port: 80
+    protocol: TCP
+    targetPort: http

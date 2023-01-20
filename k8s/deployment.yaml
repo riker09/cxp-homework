@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: starship-registry
+  name: starship-registry-deployment
   labels:
-    name: starship-registry
+    app.kubernetes.io/name: starship-registry
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: starship-registry
+      app.kubernetes.io/name: starship-registry
   template:
     metadata:
       labels:
-        app: starship-registry
+        app.kubernetes.io/name: starship-registry
     spec:
       containers:
       - name: starship-registry
@@ -22,4 +22,6 @@ spec:
             memory: "128Mi"
             cpu: "200m"
         ports:
-        - containerPort: 8080
+        - name: http
+          protocol: TCP
+          containerPort: 8080

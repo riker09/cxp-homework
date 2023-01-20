@@ -1,18 +1,19 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: starship-registry-ingress
+  name: cxp-team-starfleet-ingress
   labels:
     name: starship-registry
 spec:
   ingressClassName: nginx
   rules:
-  - http:
+  - host: cxp.k8s.azure.msgoat.eu
+    http:
       paths:
       - pathType: Prefix
         path: "/cxp-team-starfleet/starship-registry"
         backend:
           service:
-            name: starfleet-registry-service
+            name: starship-registry-service
             port:
-              number: 80
+              name: http

@@ -1,0 +1,23 @@
+{{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1
+{{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1beta1
+{{- else -}}
+apiVersion: extensions/v1beta1
+{{- end }}
+kind: NetworkPolicy
+metadata:
+  name: {{ include "registry-number-api.fullname" . }}-allow-ingress
+  labels:
+    {{- include "registry-number-api.labels" . | nindent 4 }}
+
+spec:
+  policyTypes:
+  - Ingress
+  podSelector:
+    matchLabels:
+      {{- include "registry-number-api.selectorLabels" . | nindent 6 }}
+  ingress:
+  - ports:
+      - protocol: TCP
+        port: http

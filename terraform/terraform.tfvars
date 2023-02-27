@@ -1,0 +1,8 @@
+region_name     = "us-west-1"
+org_name        = ""
+department_name = ""
+solution_name   = ""
+solution_stage  = ""
+solution_fqn    = ""
+network_name    = ""
+network_cidr    = "10.37.0.0/16"

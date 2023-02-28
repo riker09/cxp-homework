@@ -3,3 +3,4 @@
 
 /gen
 node_modules
+.envrc

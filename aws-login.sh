@@ -1,6 +1,6 @@
 #!/bin/bash
-export MFA_ARN=#add your mfa arn here
-export AWS_PROFILE=msgcxp
+# add your mfa arn and default profile to .envrc
+source .envrc
 export TOKEN=$(aws sts get-session-token --serial-number $MFA_ARN --token-code $1)
 export ACCESS_KEY=$(echo $TOKEN | jq .Credentials.AccessKeyId)
 export SECRET_ACCESS_KEY=$(echo $TOKEN | jq .Credentials.SecretAccessKey)

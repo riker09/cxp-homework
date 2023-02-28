@@ -66,8 +66,24 @@ resource "aws_subnet" "public_subnets" {
 }
 
 ## Create Security Group
+#resource "aws_security_group" "redshirt" {}
 
 ## Create EC2 instance
+module "ec2_instance" {
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  version = "~> 3.0"
+
+  name = "starbase-80"
+
+  ami           = "ami-034f10b7ffb207ab9"
+  instance_type = "t2.micro"
+  key_name      = "CXP AWS EC2 KeyPair"
+  monitoring    = true
+  #vpc_security_group_ids = [aws_vpc.vpc.id]
+  subnet_id = aws_subnet.public_subnets[0].id
+
+  tags = merge({ Name = "starbase-80" }, local.main_common_tags)
+}
 
 ## Install Webserver on EC2
 

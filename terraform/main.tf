@@ -25,6 +25,9 @@ locals {
   }
 }
 
+data "aws_availability_zones" "current" {
+  state = "available"
+}
 
 ## --- VPC SECTION
 
@@ -33,7 +36,10 @@ locals {
 # }
 
 locals {
-  vpc_name = "vpc-${var.region_name}-${var.solution_fqn}-${var.network_name}"
+  vpc_name           = "vpc-${var.region_name}-${var.solution_fqn}-${var.network_name}"
+  gw_name            = "igw-${var.region_name}-${var.solution_fqn}"
+  subnet_names       = [for zone_name in data.aws_availability_zones.current.names : "sn-${zone_name}-${var.solution_fqn}-${var.network_name}-public"]
+  subnet_cidr_blocks = cidrsubnets(var.network_cidr, 8, 8, 8)
 }
 
 # Create a VPC resource
@@ -43,6 +49,28 @@ resource "aws_vpc" "vpc" {
   enable_dns_support   = true
   tags                 = merge({ Name = local.vpc_name }, local.main_common_tags)
 }
+
+## Create Gateway
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.vpc.id
+  tags   = merge({ Name = local.gw_name }, local.main_common_tags)
+}
+
+## Create public subnet
+resource "aws_subnet" "public_subnets" {
+  count             = length(local.subnet_names)
+  vpc_id            = aws_vpc.vpc.id
+  cidr_block        = local.subnet_cidr_blocks[count.index]
+  availability_zone = data.aws_availability_zones.current.names[count.index]
+  tags              = merge({ Name = local.subnet_names[count.index] }, local.main_common_tags)
+}
+
+## Create Security Group
+
+## Create EC2 instance
+
+## Install Webserver on EC2
+
 
 ## Read existing resources
 # data aws_vpc_given {

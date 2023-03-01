@@ -1,0 +1,2 @@
+export MFA_ARN=#add your mfa arn here
+export AWS_PROFILE=msgcxp

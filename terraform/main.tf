@@ -52,13 +52,14 @@ resource "aws_internet_gateway" "igw" {
   tags   = merge({ Name = local.gw_name }, local.main_common_tags)
 }
 
+
 # Create public subnet
 resource "aws_subnet" "public_subnets" {
-  count             = length(local.subnet_names)
-  vpc_id            = aws_vpc.vpc.id
-  cidr_block        = local.subnet_cidr_blocks[count.index]
-  availability_zone = data.aws_availability_zones.current.names[count.index]
-  tags              = merge({ Name = local.subnet_names[count.index] }, local.main_common_tags)
+  count                = length(local.subnet_names)
+  vpc_id               = aws_vpc.vpc.id
+  cidr_block           = local.subnet_cidr_blocks[count.index]
+  availability_zone_id = data.aws_availability_zones.current.zone_ids[count.index]
+  tags                 = merge({ Name = local.subnet_names[count.index] }, local.main_common_tags)
 }
 
 # Create Security Group
@@ -78,6 +79,7 @@ resource "aws_security_group_rule" "public_out" {
   security_group_id = aws_security_group.sg.id
 }
 
+# security rules for ssh
 resource "aws_security_group_rule" "public_in_ssh" {
   type              = "ingress"
   from_port         = 22
@@ -87,6 +89,7 @@ resource "aws_security_group_rule" "public_in_ssh" {
   security_group_id = aws_security_group.sg.id
 }
 
+# security rules for http
 resource "aws_security_group_rule" "public_in_http" {
   type              = "ingress"
   from_port         = 80
@@ -96,6 +99,7 @@ resource "aws_security_group_rule" "public_in_http" {
   security_group_id = aws_security_group.sg.id
 }
 
+# security rules for https
 resource "aws_security_group_rule" "public_in_https" {
   type              = "ingress"
   from_port         = 443
@@ -105,29 +109,57 @@ resource "aws_security_group_rule" "public_in_https" {
   security_group_id = aws_security_group.sg.id
 }
 
+# create a route table
+resource "aws_route_table" "route_table" {
+  vpc_id = aws_vpc.vpc.id
+  tags   = merge({ Name = "Route Table" }, local.main_common_tags)
+}
+
+# add a route to the internet gateway
+resource "aws_route" "internet_gateway" {
+  route_table_id         = aws_route_table.route_table.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.igw.id
+}
+
+# let the subnets use the created route table
+resource "aws_route_table_association" "subnets" {
+  count          = length(local.subnet_names)
+  route_table_id = aws_route_table.route_table.id
+  subnet_id      = aws_subnet.public_subnets[count.index].id
+}
+
+# make the created route table the default route table
+resource "aws_main_route_table_association" "main_route_table" {
+  route_table_id = aws_route_table.route_table.id
+  vpc_id         = aws_vpc.vpc.id
+}
+
 # Install Nginx on EC2
 locals {
   script = <<EOT
  #!/bin/bash
- sudo yum update -y
- sudo amazon-linux-extras install nginx1 -y
- sudo amazon-linux-extras enable nginx1
- sudo systemctl start nginx
+    yum update -y
+    amazon-linux-extras install nginx1 -y
+    systemctl enable nginx
+    systemctl start nginx
+    cd /usr/share/nginx/html
+    cp index.html index.original.html
+    cat index.original.html | sed 's/Welcome to nginx!/Welcome to nginx of ${var.solution_fqn}!/g' > index.html
  EOT
 }
 
 # Create EC2 instance
-module "ec2_instance" {
-  source                      = "terraform-aws-modules/ec2-instance/aws"
-  version                     = "~> 3.0"
-  name                        = "starbase-80"
+resource "aws_instance" "ec2_instance" {
   ami                         = "ami-034f10b7ffb207ab9"
   instance_type               = "t2.micro"
-  key_name                    = "CXP AWS EC2 KeyPair"
+  key_name                    = "key-us-west-1-cxp-bruesd"
   monitoring                  = true
   vpc_security_group_ids      = [aws_security_group.sg.id]
+  security_groups             = [aws_security_group.sg.id]
   subnet_id                   = aws_subnet.public_subnets[0].id
   tags                        = merge({ Name = "starbase-80" }, local.main_common_tags)
   associate_public_ip_address = true
   user_data                   = local.script
+  depends_on                  = [aws_internet_gateway.igw]
 }

@@ -1,0 +1,7 @@
+region_name     = "us-west-1"
+org_name        = "msg"
+department_name = "BrAM"
+solution_name   = "cxp"
+solution_stage  = "prod"
+solution_fqn    = "cxp-starfleet"
+backend_name    = "tf-state"

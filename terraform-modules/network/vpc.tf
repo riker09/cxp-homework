@@ -1,10 +1,10 @@
 ## VPC and Network SECTION
 
 locals {
-  vpc_name = "vpc-${var.region_name}-${var.solution_fqn}-${var.network_name}"
+  vpc_name           = "vpc-${var.region_name}-${var.solution_fqn}-${var.network_name}"
   subnet_names       = [for zone_name in data.aws_availability_zones.current.names : "sn-${zone_name}-${var.solution_fqn}-${var.network_name}-public"]
   subnet_cidr_blocks = cidrsubnets(var.network_cidr, 8, 8, 8)
-  gw_name = "igw-${var.region_name}-${var.solution_fqn}"
+  gw_name            = "igw-${var.region_name}-${var.solution_fqn}"
 }
 
 # Create a VPC resource

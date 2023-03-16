@@ -57,3 +57,8 @@ variable "is_public" {
   description = "Defines if this instance is public"
   type = bool
 }
+
+variable "user_script" {
+  description = "Script to install stuff after starting instance"
+  default = ""
+}

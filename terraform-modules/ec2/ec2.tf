@@ -1,18 +1,6 @@
 # EC2 with security group and Nginx installation
 
-# Script to install Nginx on the EC2
-locals {
-  script = <<EOT
- #!/bin/bash
-    yum update -y
-    amazon-linux-extras install nginx1 -y
-    systemctl enable nginx
-    systemctl start nginx
-    cd /usr/share/nginx/html
-    cp index.html index.original.html
-    cat index.original.html | sed 's/Welcome to nginx!/Welcome to nginx of ${var.solution_fqn}!/g' > index.html
- EOT
-}
+
 
 # Create Security Group
 resource "aws_security_group" "sg" {
@@ -45,6 +33,7 @@ resource "aws_security_group_rule" "public_in_ssh" {
 
 # incoming security rules for HTTP
 resource "aws_security_group_rule" "public_in_http" {
+  count             = var.is_public ? 1 : 0
   type              = "ingress"
   from_port         = 80
   to_port           = 80
@@ -64,6 +53,6 @@ resource "aws_instance" "ec2_instance" {
   subnet_id                   = var.subnet_id
   tags                        = merge({ Name = "starbase-80" }, local.ec2_common_tags)
   associate_public_ip_address = var.is_public
-  user_data                   = local.script
+  user_data                   = var.user_script
   depends_on                  = [var.iwg]
 }

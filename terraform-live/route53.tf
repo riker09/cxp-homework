@@ -30,8 +30,8 @@ resource "aws_route53_record" "nginx" {
   name    = "nginx.${aws_route53_zone.starfleet.name}"
   type    = "A"
   ttl     = 300
-  records = [module.ec2.ec2_public_ip]
+  records = [module.ec2_public.ec2_public_ip]
   depends_on = [
-    module.ec2
+    module.ec2_public
   ]
 }

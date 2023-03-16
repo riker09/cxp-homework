@@ -63,7 +63,7 @@ resource "aws_instance" "ec2_instance" {
   security_groups             = [aws_security_group.sg.id]
   subnet_id                   = var.subnet_id
   tags                        = merge({ Name = "starbase-80" }, local.ec2_common_tags)
-  associate_public_ip_address = true
+  associate_public_ip_address = var.is_public
   user_data                   = local.script
   depends_on                  = [var.iwg]
 }

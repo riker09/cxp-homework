@@ -9,3 +9,7 @@ output "subnet_id" {
 output "igw" {
   value = aws_internet_gateway.igw
 }
+
+output "route_table" {
+  value = aws_route_table.route_table
+}

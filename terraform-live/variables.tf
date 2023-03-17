@@ -45,3 +45,14 @@ variable "network_cidr" {
   default     = ""
   description = "description"
 }
+
+variable "network_two_cidr" {
+  type        = string
+  default     = ""
+  description = "description"
+}
+variable "network_two_name" {
+  type        = string
+  default     = ""
+  description = "description"
+}

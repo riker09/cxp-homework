@@ -22,3 +22,7 @@ Links:
 
 Assignment 36: Create an AWS EKS cluster with a single managed Node Group spanning at least 2 availability zones using Terraform. The AWS EKS cluster must be accessible via kubectl.
 (all teams)
+
+Result - Commands:
+   aws eks list-clusters --region=us-west-1
+   aws eks update-kubeconfig --name=starfleet-eks-cluster --region=us-west-1 --kubeconfig=startfleet-cluster.yaml

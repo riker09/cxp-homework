@@ -1,0 +1,1 @@
+{"Modules":[{"Key":"network_one","Source":"../terraform-modules/network","Dir":"../terraform-modules/network"},{"Key":"vpc_network","Source":"../terraform-modules/network","Dir":"../terraform-modules/network"},{"Key":"","Source":"","Dir":"."}]}

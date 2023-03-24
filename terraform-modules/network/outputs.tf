@@ -6,6 +6,10 @@ output "subnet_id" {
   value = aws_subnet.public_subnets[0].id
 }
 
+output "subnet_ids" {
+  value = [aws_subnet.public_subnets[0].id, aws_subnet.public_subnets[1].id]
+}
+
 output "igw" {
   value = aws_internet_gateway.igw
 }
